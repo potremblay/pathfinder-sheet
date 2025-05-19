@@ -1,0 +1,40 @@
+{
+  "name": "pathfinder-sheet",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "test": "jest",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@react-router/node": "^7.5.3",
+    "@react-router/serve": "^7.5.3",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "isbot": "^5.1.27",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.5.3"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^7.5.3",
+    "@tailwindcss/vite": "^4.1.4",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "globals": "^16.1.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.4",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

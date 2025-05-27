@@ -5,6 +5,10 @@
 /.react-router/
 /build/
 
+# Chrome debugger
+/public/.well-known/
+
+
 # Jest
 /coverage/
 *storybook.log

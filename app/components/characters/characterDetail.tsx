@@ -5,29 +5,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { Textarea } from '~/components/ui/textarea';
-import { Edit, Eye, } from 'lucide-react';
-import { useState } from 'react';
-import AttributeEditor  from '~/components/characters/attributes';
-import { Attribute } from 'core/models/atoms/attributes/types';
+import { Edit, Eye } from 'lucide-react';
+import AttributeEditor from '~/components/characters/attributeEditor';
 import { roll } from 'core/models/atoms/dices/roll';
+import { Character } from 'core/models/organisms/character/types';
+import SkillList from '~/components/characters/skillList';
+import { Skill } from 'core/models/molecules/skills/skill.types';
+import { Proficiency } from 'core/models/atoms/proficiency/type';
+import { useState } from 'react';
 
 type Props = {
-    attributes: Record<Attribute, number>,
-}
+  character: Character;
+};
 
-const defaultAttributes = {
-    strength: 10,
-    constitution: 10,
-    dexterity: 10,
-    intelligence: 10,
-    wisdom: 10,
-    charisma: 10,
-}
 
-export default function Component({ attributes: initialAttributes }: Props) {
-    const [isEditing, setIsEditing] = useState(true);
-    const [attributes, setAttributes] = useState(defaultAttributes);
 
+export default function CharacterDetail({ character: initialCharacter }: Props) {
+  const [isEditing, setIsEditing] = useState(true);
+  const [character, setCharacter] = useState(initialCharacter);
 
   const [characterInfo, setCharacterInfo] = useState({
     characterName: '',
@@ -44,23 +39,42 @@ export default function Component({ attributes: initialAttributes }: Props) {
     }));
   };
 
-
-  const onChangeFactory = (attribute: string): ((newValue: number) => void) => {
+  const onChangeAttributeFactory = (attribute: string): ((newValue: number) => void) => {
     return (value: number) => {
-      setAttributes((prev) => ({
+      setCharacter((prev) => ({
         ...prev,
-        [attribute]: value,
+        attributes: {
+          ...prev.attributes,
+          [attribute]: value,
+        },
       }));
     };
   };
 
-  const onRollFactory = (attribute: string): () => void => {
-    const onChange = onChangeFactory(attribute);
+  const onProficiencyChange = (skill: Skill, proficiency: Proficiency) => {
+    setCharacter((prevCharacter) => {
+      const updatedSkills = [...prevCharacter.skills].map((prevSkill) => {
+        const newSkill = {...prevSkill}
+        if (newSkill.name === skill.name) {
+          newSkill.proficiency = proficiency;
+        }
+        return newSkill;
+      });
+
+      return {
+        ...prevCharacter,
+        skills: updatedSkills,
+      };
+    });
+  };
+
+  const onRollFactory = (attribute: string): (() => void) => {
+    const onChange = onChangeAttributeFactory(attribute);
 
     return () => {
-        onChange(roll('1d20').result);
-    }
-  }
+      onChange(roll('1d20').result);
+    };
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -159,18 +173,24 @@ export default function Component({ attributes: initialAttributes }: Props) {
           <CardDescription>Your character's core attributes</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {Object.entries(attributes).map(([attribute, value]) => (
+          {Object.entries(character.attributes).map(([attribute, value]) => (
             <AttributeEditor
               key={attribute}
               isEditing={isEditing}
               attribute={attribute}
               value={value}
-              onChange={onChangeFactory(attribute)}
+              onChange={onChangeAttributeFactory(attribute)}
               onRoll={onRollFactory(attribute)}
             ></AttributeEditor>
           ))}
         </CardContent>
       </Card>
+
+      <SkillList
+        isEditing={isEditing}
+        character={character}
+        onProficiencyChange={onProficiencyChange}
+      ></SkillList>
 
       {/* Character Notes */}
       <Card>

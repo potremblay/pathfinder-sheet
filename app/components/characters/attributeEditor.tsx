@@ -4,7 +4,6 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import formatModifier from 'core/models/atoms/modifiers/formatModifier';
 import getModifier from 'core/models/atoms/modifiers/getModifier';
-import { Attribute } from 'core/models/atoms/attributes/types';
 
 type Props = {
   value: number;

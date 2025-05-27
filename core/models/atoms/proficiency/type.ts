@@ -1,0 +1,1 @@
+export type Proficiency =  "T" | "E" | "M" | "L" | "untrained";
